@@ -4,4 +4,17 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "agno>=2.2.6",
+    "bcrypt>=5.0.0",
+    "celery>=5.5.3",
+    "fastapi[all,standard]>=0.120.4",
+    "google-genai>=1.47.0",
+    "pandas>=2.3.3",
+    "pgvector>=0.4.1",
+    "pydantic>=2.12.3",
+    "pydantic-settings>=2.11.0",
+    "python-jose[cryptography]>=3.5.0",
+    "redis>=7.0.1",
+    "uvicorn[standard]>=0.38.0",
+]
