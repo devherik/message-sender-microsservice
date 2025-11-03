@@ -8,7 +8,7 @@ class IDatabaseService(ABC):
         pass
 
     @abstractmethod
-    def close_connection(self, connection: Any) -> None:
+    def close_connection(self, connection: Any) -> bool:
         pass
 
     @abstractmethod
@@ -18,7 +18,7 @@ class IDatabaseService(ABC):
     @abstractmethod
     def execute_with_retry(
         self, query, params: Optional[Dict[str, Any]] = None, max_retries: int = 3
-    ) -> Any:
+    ) -> Dict[str, Any]:
         pass
 
     @abstractmethod
