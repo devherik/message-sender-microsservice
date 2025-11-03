@@ -1,26 +1,25 @@
-from abc import ABC, abstractmethod
+from models.interfaces import IDatabaseService
 from typing import Any, Dict, Optional
 
-
-class IDatabaseService(ABC):
-    @abstractmethod
+class PostgresRepository(IDatabaseService):
     def get_connection(self) -> Any:
+        # Implementation for getting a Postgres connection
         pass
 
-    @abstractmethod
     def close_connection(self, connection: Any) -> None:
+        # Implementation for closing a Postgres connection
         pass
 
-    @abstractmethod
     def is_connection_alive(self, connection) -> bool:
+        # Implementation to check if the Postgres connection is alive
         pass
 
-    @abstractmethod
     def execute_with_retry(
         self, query, params: Optional[Dict[str, Any]] = None, max_retries: int = 3
     ) -> Any:
+        # Implementation for executing a query with retry logic
         pass
 
-    @abstractmethod
     def get_connection_info(self) -> Dict[str, Any]:
+        # Implementation to get Postgres connection info
         pass
