@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from psycopg2.extensions import connection as PgConnection
 
-from main import get_db_connection
+from core.dependencies import get_db_connection
 from models.models import Message
 from services.message_service import MessageService
 

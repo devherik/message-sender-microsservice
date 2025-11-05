@@ -1,9 +1,10 @@
+import os
 import sys
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 from pathlib import Path
 
-from helper.dotenv_load_helper import find_env_file, create_sample_env_file
+from helpers.dotenv_load_helper import find_env_file, create_sample_env_file
 
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
@@ -20,13 +21,15 @@ except Exception as e:
 
 
 class Settings(BaseSettings):
-    jwt_secret: str
-    redis_url: str
-    postgres_user: str
-    postgres_password: str
-    postgres_db: str
-    postgres_host: str
-    postgres_port: int
+    debug_mode: bool = os.getenv("DEBUG_MODE", "true").lower() == "true"
+    environment: bool = os.getenv("DEVELOPMENT_ENV", "true").lower() == "true"
+    jwt_secret: str = os.getenv("JWT_SECRET", "your-default-secret")
+    redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+    postgres_user: str = os.getenv("POSTGRES_USER", "user")
+    postgres_password: str = os.getenv("POSTGRES_PASSWORD", "password")
+    postgres_db: str = os.getenv("POSTGRES_DB", "messages_db")
+    postgres_host: str = os.getenv("POSTGRES_HOST", "localhost")
+    postgres_port: int = int(os.getenv("POSTGRES_PORT", 5432))
 
     @property
     def get_postgres_dsn(self) -> str:
