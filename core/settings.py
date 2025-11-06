@@ -22,7 +22,7 @@ except Exception as e:
 
 class Settings(BaseSettings):
     debug_mode: bool = os.getenv("DEBUG_MODE", "true").lower() == "true"
-    environment: bool = os.getenv("DEVELOPMENT_ENV", "true").lower() == "true"
+    environment: str = os.getenv("DEVELOPMENT_ENV", "development")
     jwt_secret: str = os.getenv("JWT_SECRET", "your-default-secret")
     redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
     postgres_user: str = os.getenv("POSTGRES_USER", "user")

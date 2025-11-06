@@ -14,7 +14,6 @@ class LoggerHelper:
 
     def __init__(self):
         self.is_debug = settings.debug_mode
-        self.is_development = settings.environment == "development"
 
     def info(self, message: str, correlation_id: str = "") -> None:
         """
@@ -22,7 +21,7 @@ class LoggerHelper:
             message (str): The message to log.
             correlation_id (str): An optional correlation ID for tracking requests.
         """
-        if self.is_development:
+        if self.is_debug:
             print(f"{BLUE}INFO {correlation_id} {RESET}{message}")
         else:
             print(f"INFO {correlation_id} {message}")
@@ -33,7 +32,7 @@ class LoggerHelper:
             message (str): The success message to log.
             correlation_id (str): An optional correlation ID for tracking requests.
         """
-        if self.is_development:
+        if self.is_debug:
             print(f"{GREEN}SUCCESS {correlation_id} {RESET}{message}")
         else:
             print(f"SUCCESS {correlation_id} {message}")
@@ -44,7 +43,7 @@ class LoggerHelper:
             message (str): The warning message to log.
             correlation_id (str): An optional correlation ID for tracking requests.
         """
-        if self.is_development:
+        if self.is_debug:
             print(f"{YELLOW}WARNING {correlation_id} {RESET}{message}")
         else:
             print(f"WARNING {correlation_id} {message}")
@@ -55,7 +54,7 @@ class LoggerHelper:
             message (str): The error message to log.
             correlation_id (str): An optional correlation ID for tracking requests.
         """
-        if self.is_development:
+        if self.is_debug:
             print(f"{RED}ERROR {correlation_id} {RESET}{message}")
         else:
             print(f"ERROR {correlation_id} {message}")
@@ -67,10 +66,7 @@ class LoggerHelper:
             correlation_id (str): An optional correlation ID for tracking requests.
         """
         if self.is_debug:
-            if self.is_development:
-                print(f"{MAGENTA}DEBUG {correlation_id} {RESET}{message}")
-            else:
-                print(f"DEBUG {correlation_id} {message}")
+            print(f"{MAGENTA}DEBUG {correlation_id} {RESET}{message}")
 
     def spacer(self) -> None:
         """
