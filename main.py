@@ -2,12 +2,14 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 from fastapi import FastAPI, Depends
+from httpcore import request
 from psycopg2.extensions import connection as PgConnection
 
 from core.dependencies import get_db_connection, get_db_service, db_repository
 from models.interfaces import IDatabaseService
 from routers import message_router
 from helpers.logging_helper import logger
+from middlewares.correlation_id_mw import correlation_id_middleware
 
 
 @asynccontextmanager
@@ -46,6 +48,7 @@ def read_root(
     """
     Root endpoint to check service and database status.
     """
+    logger.info("Root endpoint called.", correlation_id=request.state.correlation_id)
     return {
         "service": "message-sender-microsservice",
         "status": "ok",
@@ -54,6 +57,8 @@ def read_root(
 
 
 app.include_router(message_router.router, prefix="/api", tags=["Messages"])
+
+app.add_middleware(correlation_id_middleware)
 
 
 # To run this application:
