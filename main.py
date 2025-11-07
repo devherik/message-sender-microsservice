@@ -4,7 +4,7 @@ from typing import AsyncGenerator
 from fastapi import FastAPI, Depends, Request
 from psycopg2.extensions import connection as PgConnection
 
-from core.dependencies import get_db_connection, get_db_service, db_repository
+from core.dependencies import get_db_connection, get_db_service
 from models.interfaces import IDatabaseService
 from models.models import ResponseModel, SystemInfo
 from tests.database_tests import postgres_db_status
@@ -21,7 +21,7 @@ async def startup_event(app: FastAPI):
         all_dependencies_working=True,
         system_tests={"test_db_connection": postgres_db_status()},
     )
-    logger.info(f"System Status on Startup: {sys_status.model_dump()}")
+    logger.info(f"System Status on Startup: {sys_status.system_tests}")
 
 async def shutdown_event(app: FastAPI):
     logger.info(f"--- Shutting down | {app.version} ---")
