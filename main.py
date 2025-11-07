@@ -1,8 +1,7 @@
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
-from fastapi import FastAPI, Depends
-from httpcore import request
+from fastapi import FastAPI, Depends, Request
 from psycopg2.extensions import connection as PgConnection
 
 from core.dependencies import get_db_connection, get_db_service, db_repository
@@ -40,8 +39,9 @@ app = FastAPI(
 )
 
 
-@app.get("/")
+@app.get("/", tags=["Health"], response_model=dict)
 def read_root(
+    request: Request,
     db: IDatabaseService = Depends(get_db_service),
     conn: PgConnection = Depends(get_db_connection),
 ):
@@ -58,7 +58,7 @@ def read_root(
 
 app.include_router(message_router.router, prefix="/api", tags=["Messages"])
 
-app.add_middleware(correlation_id_middleware)
+app.middleware("http")(correlation_id_middleware)
 
 
 # To run this application:
