@@ -13,7 +13,7 @@ from helpers.logging_helper import logger
 from middlewares.correlation_id_mw import correlation_id_middleware
 
 async def startup_event(app: FastAPI):
-    logger.info(f"--- Message Sender Microsservice | {app.version} ---")
+    logger.info(f"--- Message Sender Microsservice | version {app.version} ---")
     sys_status: SystemInfo = SystemInfo(
         os="Linux",
         python_version="3.12",
@@ -24,7 +24,7 @@ async def startup_event(app: FastAPI):
     logger.info(f"System Status on Startup: {sys_status.system_tests}")
 
 async def shutdown_event(app: FastAPI):
-    logger.info(f"--- Shutting down | {app.version} ---")
+    logger.info(f"--- Shutting down | version {app.version} ---")
 
 
 @asynccontextmanager
@@ -32,14 +32,13 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """
     Manage startup and shutdown events for the application.
     """
-    logger.info("Connecting to database...")
-    # You can add a health check here to ensure the database is reachable on startup
     try:
         await startup_event(app)
     except Exception as e:
         logger.error(f"Error connecting to database: {e}")
-    yield
-    await shutdown_event(app)
+    finally:
+        yield
+        await shutdown_event(app)
 
 
 app = FastAPI(
