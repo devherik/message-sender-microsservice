@@ -5,6 +5,7 @@ from fastapi import FastAPI, Depends, Request
 from psycopg2.extensions import connection as PgConnection
 
 from core.dependencies import get_db_connection, get_db_service
+from core.settings import settings
 from models.interfaces import IDatabaseService
 from models.models import ResponseModel, SystemInfo
 from tests.database_tests import postgres_db_status
@@ -12,8 +13,11 @@ from routers import message_router
 from helpers.logging_helper import logger
 from middlewares.correlation_id_mw import correlation_id_middleware
 
+
 async def startup_event(app: FastAPI):
-    logger.info(f"--- Message Sender Microsservice | version {app.version} ---")
+    logger.info(
+        f"--- Message Sender Microsservice | version {app.version} |  {'Development' if settings.environment == 'development' else 'Production'} ---"
+    )
     sys_status: SystemInfo = SystemInfo(
         os="Linux",
         python_version="3.12",
@@ -21,7 +25,10 @@ async def startup_event(app: FastAPI):
         all_dependencies_working=True,
         system_tests={"test_db_connection": postgres_db_status()},
     )
-    logger.info(f"System Status on Startup: {sys_status.system_tests}")
+    logger.info(
+        f"System Status on Startup {'Development' if settings.environment == 'development' else 'Production'}: {sys_status.system_tests}"
+    )
+
 
 async def shutdown_event(app: FastAPI):
     logger.info(f"--- Shutting down | version {app.version} ---")
@@ -66,8 +73,9 @@ def read_root(
             "service": "message-sender-microsservice",
             "status": "ok",
             "database_info": db.get_connection_info(conn),
-        }
+        },
     )
+
 
 app.include_router(message_router.router, prefix="/api", tags=["Messages"])
 

@@ -8,7 +8,10 @@ from models.interfaces import IDatabaseService
 
 class PostgresRepository(IDatabaseService):
     def __init__(self):
-        self.dsn = settings.get_postgres_dsn
+        if settings.environment == "development":
+            self.dsn = settings.get_postgres_dev_dsn
+        else:
+            self.dsn = settings.get_postgres_dsn
         if not self.dsn:
             raise ValueError("Postgres DSN is not configured properly.")
 

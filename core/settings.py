@@ -30,11 +30,20 @@ class Settings(BaseSettings):
     postgres_db: str = os.getenv("POSTGRES_DB", "messages_db")
     postgres_host: str = os.getenv("POSTGRES_HOST", "localhost")
     postgres_port: int = int(os.getenv("POSTGRES_PORT", 5432))
+    postgres_dev_user: str = os.getenv("POSTGRES_DEV_USER", "postgres")
+    postgres_dev_password: str = os.getenv("POSTGRES_DEV_PASSWORD", "password")
+    postgres_dev_db: str = os.getenv("POSTGRES_DEV_DB", "database_server")
+    postgres_dev_host: str = os.getenv("POSTGRES_DEV_HOST", "localhost")
+    postgres_dev_port: int = int(os.getenv("POSTGRES_DEV_PORT", 5433))
 
     @property
     def get_postgres_dsn(self) -> str:
         return f"postgresql://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
     
+    @property
+    def get_postgres_dev_dsn(self) -> str:
+        return f"postgresql://{self.postgres_dev_user}:{self.postgres_dev_password}@{self.postgres_dev_host}:{self.postgres_dev_port}/{self.postgres_dev_db}"
+
     class Config:
         env_file = ".env"
         
