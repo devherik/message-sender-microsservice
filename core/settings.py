@@ -35,6 +35,8 @@ class Settings(BaseSettings):
     postgres_dev_db: str = os.getenv("POSTGRES_DEV_DB", "database_server")
     postgres_dev_host: str = os.getenv("POSTGRES_DEV_HOST", "localhost")
     postgres_dev_port: int = int(os.getenv("POSTGRES_DEV_PORT", 5433))
+    waha_api_url: str = os.getenv("WAHA_API_URL", "https://api.waha.com")
+    waha_api_key: str = os.getenv("WAHA_API_KEY", "your-waha-api-key")
 
     @property
     def get_postgres_dsn(self) -> str:
