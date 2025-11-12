@@ -122,6 +122,8 @@ pgvector==0.4.1
     # via message-sender-microsservice (pyproject.toml)
 prompt-toolkit==3.0.52
     # via click-repl
+psycopg2-binary==2.9.11
+    # via message-sender-microsservice (pyproject.toml)
 pyasn1==0.6.1
     # via
     #   pyasn1-modules
@@ -216,14 +218,12 @@ typer==0.20.0
 typing-extensions==4.15.0
     # via
     #   agno
-    #   anyio
     #   fastapi
     #   google-genai
     #   pydantic
     #   pydantic-core
     #   pydantic-extra-types
     #   rich-toolkit
-    #   starlette
     #   typer
     #   typing-inspection
 typing-inspection==0.4.2

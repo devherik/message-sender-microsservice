@@ -18,13 +18,16 @@ async def startup_event(app: FastAPI):
     logger.info(
         f"--- Message Sender Microsservice | version {app.version} |  {'Development' if settings.environment == 'development' else 'Production'} ---"
     )
-    sys_status: SystemInfo = SystemInfo(
-        os="Linux",
-        python_version="3.12",
-        service_uptime="72 hours",
-        all_dependencies_working=True,
-        system_tests={"test_db_connection": postgres_db_status()},
-    )
+    try:
+        sys_status: SystemInfo = SystemInfo(
+            os="Linux",
+            python_version="3.12",
+            service_uptime="72 hours",
+            all_dependencies_working=True,
+            system_tests={"test_db_connection": postgres_db_status()},
+        )
+    except Exception as e:
+        logger.error(f"Error during startup: {e}")
     logger.info(
         f"System Status on Startup {'Development' if settings.environment == 'development' else 'Production'}: {sys_status.system_tests}"
     )
