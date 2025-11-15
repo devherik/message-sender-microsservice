@@ -18,25 +18,19 @@ class MessageService:
         """
         self.repository = MessageSenderRepository(db)
 
-    def create_message(self, content: str) -> Message:
+    def create_message(self, message: Message) -> bool:
         """
         Use Case: Create a new message.
         """
         try:
-            # Here we would have more complex business logic, validations, etc.
-            message = Message(
-                app_id=1,  # In a real scenario, this would come from the context
-                sender_phone_number="+1234567890",
-                recipient_phone_number="+0987654321",
-                message_content=content,
-            )
+            object = Message.model_validate(message)
 
             # Persist the message using the repository
-            success = self.repository.persist_message(message)
+            success = self.repository.persist_message(object)
             if not success:
                 raise Exception("Failed to persist message")
 
-            return message
+            return success
         except Exception as e:
             print(f"Error creating message: {e}")
             raise

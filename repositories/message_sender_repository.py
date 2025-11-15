@@ -20,10 +20,10 @@ class MessageSenderRepository:
         """
         Sends a message by inserting it into the messages table.
         """
-        query = "INSERT INTO messages (app_id, sender_phone_number, recipient_phone_number, message_content, message_type, status) VALUES (%(app_id)s, %(sender_phone_number)s, %(recipient_phone_number)s, %(content)s, 'text', 'pending');"
+        query = "INSERT INTO messages (app_id, sender_id, recipient_phone_number, message_content, message_type, status) VALUES (%(app_id)s, %(sender_phone_number_id)s, %(recipient_phone_number)s, %(content)s, 'text', 'pending');"
         params = {
             "app_id": message.app_id,
-            "sender_phone_number": message.sender_phone_number,
+            "sender_phone_number_id": message.sender_phone_number_id,
             "recipient_phone_number": message.recipient_phone_number,
             "content": message.message_content,
         }

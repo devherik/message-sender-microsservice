@@ -86,8 +86,8 @@ class Message(BaseModel):
         ..., description="The unique identifier for the message."
     )
     app_id: int = Field(..., description="The unique identifier for the message.")
-    sender_phone_number: str = Field(
-        ..., description="The sender phone number of the message."
+    sender_phone_number_id: int = Field(
+        ..., description="The sender phone number ID of the message."
     )
     recipient_phone_number: str = Field(
         ..., description="The recipient phone number of the message."
