@@ -76,10 +76,10 @@ class PostgresRepository(IDatabaseRepository):
     def get_connection_info(self, connection: PgConnection) -> Dict[str, Any]:
         """Gets information about the given database connection."""
         if not connection:
-            return {"dsn": self.dsn, "status": "disconnected"}
+            return {"dsn": f"{self.dsn[:15]}...", "status": "disconnected"}
 
         return {
-            "dsn": self.dsn,
+            "dsn": f"{self.dsn[:15]}...",
             "status": "connected"
             if self.is_connection_alive(connection)
             else "disconnected",
