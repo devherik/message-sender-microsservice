@@ -4,9 +4,9 @@ from typing import AsyncGenerator
 from fastapi import FastAPI, Depends, Request
 from psycopg2.extensions import connection as PgConnection
 
-from core.dependencies import get_db_connection, get_db_service
+from core.dependencies import get_db_service
 from core.settings import settings
-from models.interfaces import IDatabaseService
+from models.interfaces import IDatabaseRepository
 from models.models import ResponseModel, SystemInfo
 from tests.database_tests import postgres_db_status
 from routers import message_router
@@ -60,15 +60,12 @@ app = FastAPI(
 
 
 @app.get("/", tags=["Health"], response_model=ResponseModel)
-def read_root(
-    request: Request,
-    db: IDatabaseService = Depends(get_db_service),
-    conn: PgConnection = Depends(get_db_connection),
-):
+def read_root(request: Request, db: IDatabaseRepository = Depends(get_db_service)):
     """
     Root endpoint to check service and database status.
     """
     logger.info("Root endpoint called.", correlation_id=request.state.correlation_id)
+    conn: PgConnection = db.get_connection()
     return ResponseModel(
         success=True,
         message="Service is running",

@@ -1,7 +1,7 @@
 from typing import Generator
 from psycopg2.extensions import connection as PgConnection
 
-from models.interfaces import IDatabaseService
+from models.interfaces import IDatabaseRepository
 from repositories.postgres_repository import PostgresRepository
 
 # The repository is instantiated once and shared across the application.
@@ -22,7 +22,7 @@ def get_db_connection() -> Generator[PgConnection, None, None]:
             db_repository.close_connection(connection)
 
 
-def get_db_service() -> IDatabaseService:
+def get_db_service() -> IDatabaseRepository:
     """
     FastAPI dependency that provides the database repository.
     This allows us to easily swap the database implementation in the future.

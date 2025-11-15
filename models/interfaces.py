@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 from psycopg2.extensions import connection as PgConnection
 
 
-class IDatabaseService(ABC):
+class IDatabaseRepository(ABC):
     @abstractmethod
     def get_connection(self) -> PgConnection:
         pass

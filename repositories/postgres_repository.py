@@ -3,10 +3,10 @@ from psycopg2.extensions import connection as PgConnection
 from typing import Any, Dict, Optional
 
 from core.settings import settings
-from models.interfaces import IDatabaseService
+from models.interfaces import IDatabaseRepository
 
 
-class PostgresRepository(IDatabaseService):
+class PostgresRepository(IDatabaseRepository):
     def __init__(self):
         if settings.environment == "development":
             self.dsn = settings.get_postgres_dev_dsn

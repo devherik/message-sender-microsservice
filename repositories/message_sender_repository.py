@@ -11,10 +11,10 @@ from repositories.postgres_repository import PostgresRepository
 
 
 class MessageSenderRepository:
-    def __init__(self, db_repo: PostgresRepository):
-        self.db_repo = db_repo
+    def __init__(self, db_connection: PgConnection):
+        self.db_conn = db_connection
 
-    def send_message(
+    def persist_message(
         self,
         message: Message,
     ) -> bool:

@@ -1,6 +1,7 @@
 from psycopg2.extensions import connection as PgConnection
 
 from models.models import Message
+from repositories.message_sender_repository import MessageSenderRepository
 from repositories.postgres_repository import PostgresRepository
 
 
@@ -16,23 +17,28 @@ class MessageService:
         The service depends on a connection, not the repository itself.
         This makes it more flexible and easier to test.
         """
-        self.db_repo = PostgresRepository()  # The repository is stateless
-        self.connection = db_connection
+        self.db_conn = db_connection
+        self.repository = MessageSenderRepository(self.db_repo)
 
     def create_message(self, content: str) -> Message:
         """
         Use Case: Create a new message.
         """
-        # Here you would define the query to insert a message.
-        # For now, we'll simulate it.
-        print(f"Creating message with content: {content} in the database.")
+        try:
+            # Here we would have more complex business logic, validations, etc.
+            message = Message(
+                app_id=1,  # In a real scenario, this would come from the context
+                sender_phone_number="+1234567890",
+                recipient_phone_number="+0987654321",
+                message_content=content,
+            )
 
-        # In a real scenario:
-        # query = "INSERT INTO messages (content, status) VALUES (%s, %s) RETURNING id, content, status;"
-        # params = (content, 'pending')
-        # result = self.db_repo.execute_with_retry(query, params, connection=self.connection)
-        # new_id, new_content, new_status = result[0]
-        # return Message(id=new_id, content=new_content, status=new_status)
+            # Persist the message using the repository
+            success = self.repository.persist_message(message)
+            if not success:
+                raise Exception("Failed to persist message")
 
-        # For demonstration, we return a mock object.
-        return Message(id=1, content=content, status="pending")
+            return message
+        except Exception as e:
+            print(f"Error creating message: {e}")
+            raise
