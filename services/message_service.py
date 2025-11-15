@@ -1,8 +1,7 @@
-from psycopg2.extensions import connection as PgConnection
 
 from models.models import Message
+from models.interfaces import IDatabaseRepository
 from repositories.message_sender_repository import MessageSenderRepository
-from repositories.postgres_repository import PostgresRepository
 
 
 class MessageService:
@@ -12,13 +11,12 @@ class MessageService:
     business logic of the application.
     """
 
-    def __init__(self, db_connection: PgConnection):
+    def __init__(self, db: IDatabaseRepository):
         """
         The service depends on a connection, not the repository itself.
         This makes it more flexible and easier to test.
         """
-        self.db_conn = db_connection
-        self.repository = MessageSenderRepository(self.db_repo)
+        self.repository = MessageSenderRepository(db)
 
     def create_message(self, content: str) -> Message:
         """
