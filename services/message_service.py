@@ -1,5 +1,4 @@
-
-from models.models import Message
+from models.models import Message, MessageLogs, LogTypeEnum
 from models.interfaces import IDatabaseRepository
 from repositories.message_sender_repository import MessageSenderRepository
 
@@ -26,11 +25,29 @@ class MessageService:
             object = Message.model_validate(message)
 
             # Persist the message using the repository
-            success = self.repository.persist_message(object)
-            if not success:
+            id = self.repository.persist_message(object)
+            if not id:
                 raise Exception("Failed to persist message")
 
-            return success
+            log: MessageLogs = MessageLogs(
+                log_id=None,
+                message_id=id,
+                log_message=message.message_content,
+                status=LogTypeEnum.CREATION,
+            )
+            self.persist_logs(log)
+            return True
         except Exception as e:
             print(f"Error creating message: {e}")
+            raise
+
+    def persist_logs(self, log: MessageLogs) -> bool:
+        """
+        Persists a log entry related to a message.
+        """
+        try:
+            object = MessageLogs.model_validate(log)
+            return self.repository.log_message_activity(object)
+        except Exception as e:
+            print(f"Error validating log data: {e}")
             raise

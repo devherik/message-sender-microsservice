@@ -16,11 +16,13 @@ class MessageSenderRepository:
     def persist_message(
         self,
         message: Message,
-    ) -> bool:
+    ) -> int | None:
         """
         Sends a message by inserting it into the messages table.
         """
-        query = "INSERT INTO messages (app_id, sender_id, recipient_phone_number, message_content, message_type, status) VALUES (%(app_id)s, %(sender_phone_number_id)s, %(recipient_phone_number)s, %(content)s, 'text', 'pending');"
+        query = """INSERT INTO messages (app_id, sender_id, recipient_phone_number, message_content, message_type, status)
+        VALUES (%(app_id)s, %(sender_phone_number_id)s, %(recipient_phone_number)s, %(content)s, 'text', 'pending')
+        RETURNING message_id;"""
         params = {
             "app_id": message.app_id,
             "sender_phone_number_id": message.sender_phone_number_id,
@@ -30,15 +32,16 @@ class MessageSenderRepository:
 
         try:
             connection: PgConnection = self.db_repo.get_connection()
-            self.db_repo.execute_with_retry(
+            data = self.db_repo.execute_with_retry(
                 query=query,
                 params=params,
                 connection=connection,
             )
-            return True
+            message_id = data[0][0] if data else None
+            return message_id
         except Exception as e:
             print(f"Error sending message: {e}")
-            return False
+            return None
         finally:
             if "connection" in locals():
                 self.db_repo.close_connection(connection)
@@ -50,11 +53,11 @@ class MessageSenderRepository:
         """
         Logs message activity into the message_logs table.
         """
-        query = "INSERT INTO message_logs (message_id, log_type, log_content) VALUES (%(message_id)s, %(log_type)s, %(log_content)s);"
+        query = "INSERT INTO message_logs (message_id, log_message, status) VALUES (%(message_id)s, %(log_message)s, %(status)s);"
         params = {
             "message_id": log.message_id,
-            "log_type": log.log_type,
-            "log_content": log.log_content,
+            "log_message": log.log_message,
+            "status": log.status,
         }
 
         try:

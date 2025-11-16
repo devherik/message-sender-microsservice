@@ -1,6 +1,14 @@
+import enum
 from datetime import date
 from typing import Optional
 from pydantic import BaseModel, Field
+
+
+class LogTypeEnum(str, enum.Enum):
+    CREATION = "creation"
+    UPDATE = "update"
+    DELETION = "deletion"
+    ERROR = "error"
 
 
 class SystemInfo(BaseModel):
@@ -117,7 +125,9 @@ class MessageLogs(BaseModel):
         ..., description="The unique identifier for the associated message."
     )
     log_message: str = Field(..., description="The log message content.")
-    status: str = Field(..., description="The status recorded in the log entry.")
+    status: LogTypeEnum = Field(
+        ..., description="The status recorded in the log entry."
+    )
 
 
 class MessageMetrics(BaseModel):
@@ -165,10 +175,15 @@ class PhoneNumber(BaseModel):
         ..., description="The unique identifier for the phone number."
     )
     phone_number: str = Field(..., description="The phone number in E.164 format.")
-    event_type: str = Field(..., description="The type of phone number (e.g., mobile, landline).")
-    app_id: int = Field(..., description="The unique identifier for the associated application.")
+    event_type: str = Field(
+        ..., description="The type of phone number (e.g., mobile, landline)."
+    )
+    app_id: int = Field(
+        ..., description="The unique identifier for the associated application."
+    )
     is_webhook: bool = Field(
-        default=False, description="Indicates if the phone number is associated with a webhook."
+        default=False,
+        description="Indicates if the phone number is associated with a webhook.",
     )
 
 
@@ -186,6 +201,10 @@ class Webhook(BaseModel):
     webhook_id: Optional[int] = Field(
         ..., description="The unique identifier for the webhook."
     )
-    app_id: int = Field(..., description="The unique identifier for the associated application.")
+    app_id: int = Field(
+        ..., description="The unique identifier for the associated application."
+    )
     url: str = Field(..., description="The URL of the webhook.")
-    event_type: str = Field(..., description="The type of event the webhook is associated with.")
+    event_type: str = Field(
+        ..., description="The type of event the webhook is associated with."
+    )
