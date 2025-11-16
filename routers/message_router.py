@@ -36,11 +36,12 @@ def create_message(
         message_content=message_content,
         status="pending",
     )
-    success = service.create_message(message)
+    id = service.create_message(message)
+    success = id is not None
     return ResponseModel(
         success=success,
         message="Message created successfully"
         if success
         else "Failed to create message",
-        data={},
+        data={"message_id": id} if success else {},
     )

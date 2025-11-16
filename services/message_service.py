@@ -17,7 +17,7 @@ class MessageService:
         """
         self.repository = MessageSenderRepository(db)
 
-    def create_message(self, message: Message) -> bool:
+    def create_message(self, message: Message) -> int:
         """
         Use Case: Create a new message.
         """
@@ -36,7 +36,7 @@ class MessageService:
                 status=LogTypeEnum.CREATION,
             )
             self.persist_logs(log)
-            return True
+            return id
         except Exception as e:
             print(f"Error creating message: {e}")
             raise
