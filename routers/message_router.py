@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from core.dependencies import get_db_service
+from core.dependencies import get_db_repository
 from models.interfaces import IDatabaseRepository
 from models.models import Message
 from routers.schemas import ResponseModel
@@ -11,7 +11,7 @@ router = APIRouter()
 
 # This dependency provides the service, which contains our business logic.
 def get_message_service(
-    db: IDatabaseRepository = Depends(get_db_service),
+    db: IDatabaseRepository = Depends(get_db_repository),
 ) -> CreateMessageService:
     """
     Dependency to create a MessageService with a request-scoped database connection.

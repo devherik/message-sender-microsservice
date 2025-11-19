@@ -22,7 +22,7 @@ def get_db_connection() -> Generator[PgConnection, None, None]:
             db_repository.close_connection(connection)
 
 
-def get_db_service() -> IDatabaseRepository:
+def get_db_repository() -> IDatabaseRepository:
     """
     FastAPI dependency that provides the database repository.
     This allows us to easily swap the database implementation in the future.
