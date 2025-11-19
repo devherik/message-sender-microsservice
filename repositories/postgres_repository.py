@@ -46,9 +46,7 @@ class PostgresRepository(IDatabaseRepository):
         The connection is managed by the caller (e.g., a FastAPI dependency).
         """
         if not connection or connection.closed:
-            raise ConnectionError(
-                "A valid database connection must be provided."
-            )
+            raise ConnectionError("A valid database connection must be provided.")
 
         last_exception = None
         for attempt in range(max_retries):

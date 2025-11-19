@@ -94,6 +94,8 @@ idna==3.11
     #   email-validator
     #   httpx
     #   requests
+iniconfig==2.3.0
+    # via pytest
 itsdangerous==2.2.0
     # via fastapi
 jinja2==3.1.6
@@ -116,10 +118,13 @@ packaging==25.0
     # via
     #   agno
     #   kombu
+    #   pytest
 pandas==2.3.3
     # via message-sender-microsservice (pyproject.toml)
 pgvector==0.4.1
     # via message-sender-microsservice (pyproject.toml)
+pluggy==1.6.0
+    # via pytest
 prompt-toolkit==3.0.52
     # via click-repl
 psycopg2-binary==2.9.11
@@ -152,7 +157,11 @@ pydantic-settings==2.11.0
     #   agno
     #   fastapi
 pygments==2.19.2
-    # via rich
+    # via
+    #   pytest
+    #   rich
+pytest==9.0.1
+    # via message-sender-microsservice (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via
     #   celery

@@ -1,5 +1,6 @@
 from core.dependencies import db_repository
 
+
 def postgres_db_status() -> bool:
     """
     Provides system information.

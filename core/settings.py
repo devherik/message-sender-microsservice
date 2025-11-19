@@ -41,12 +41,13 @@ class Settings(BaseSettings):
     @property
     def get_postgres_dsn(self) -> str:
         return f"postgresql://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
-    
+
     @property
     def get_postgres_dev_dsn(self) -> str:
         return f"postgresql://{self.postgres_dev_user}:{self.postgres_dev_password}@{self.postgres_dev_host}:{self.postgres_dev_port}/{self.postgres_dev_db}"
 
     class Config:
         env_file = ".env"
-        
+
+
 settings = Settings()
