@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends
 
 from core.dependencies import get_db_service
 from models.interfaces import IDatabaseRepository
-from models.models import Message, ResponseModel
+from models.models import Message
+from routers.schemas import ResponseModel
 from services.message_service import MessageService
 
 router = APIRouter()

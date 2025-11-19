@@ -7,11 +7,12 @@ from psycopg2.extensions import connection as PgConnection
 from core.dependencies import get_db_service
 from core.settings import settings
 from models.interfaces import IDatabaseRepository
-from models.models import ResponseModel, SystemInfo
-from tests.database_tests import postgres_db_status
+from models.models import SystemInfo
 from routers import message_router
-from helpers.logging_helper import logger
+from routers.schemas import ResponseModel
 from middlewares.correlation_id_mw import correlation_id_middleware
+from tests.database_tests import postgres_db_status
+from helpers.logging_helper import logger
 
 
 async def startup_event(app: FastAPI):
