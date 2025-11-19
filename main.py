@@ -64,7 +64,7 @@ def read_root(request: Request, db: IDatabaseRepository = Depends(get_db_service
     """
     Root endpoint to check service and database status.
     """
-    logger.info("Root endpoint called.", correlation_id=request.state.correlation_id)
+    logger.info("Root endpoint called.")
     conn: PgConnection = db.get_connection()
     return ResponseModel(
         success=True,

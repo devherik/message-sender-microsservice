@@ -1,4 +1,5 @@
 from core.settings import settings
+from core.context import global_context
 
 # Define ANSI escape codes for colors and reset
 RED = "\033[91m"
@@ -15,58 +16,58 @@ class LoggerHelper:
     def __init__(self):
         self.is_debug = settings.debug_mode
 
-    def info(self, message: str, correlation_id: str = "") -> None:
+    def info(self, message: str) -> None:
         """
         Logs an informational message.
             message (str): The message to log.
             correlation_id (str): An optional correlation ID for tracking requests.
         """
         if self.is_debug:
-            print(f"{BLUE}INFO {correlation_id} {RESET}{message}")
+            print(f"{BLUE}INFO {global_context.get('correlation_id', '')} {RESET}{message}")
         else:
-            print(f"INFO {correlation_id} {message}")
+            print(f"INFO {global_context.get('correlation_id', '')} {message}")
 
-    def success(self, message: str, correlation_id: str = "") -> None:
+    def success(self, message: str) -> None:
         """
         Logs a success message.
             message (str): The success message to log.
             correlation_id (str): An optional correlation ID for tracking requests.
         """
         if self.is_debug:
-            print(f"{GREEN}SUCCESS {correlation_id} {RESET}{message}")
+            print(f"{GREEN}SUCCESS {global_context.get('correlation_id', '')} {RESET}{message}")
         else:
-            print(f"SUCCESS {correlation_id} {message}")
+            print(f"SUCCESS {global_context.get('correlation_id', '')} {message}")
 
-    def warning(self, message: str, correlation_id: str = "") -> None:
+    def warning(self, message: str) -> None:
         """
         Logs a warning message.
             message (str): The warning message to log.
             correlation_id (str): An optional correlation ID for tracking requests.
         """
         if self.is_debug:
-            print(f"{YELLOW}WARNING {correlation_id} {RESET}{message}")
+            print(f"{YELLOW}WARNING {global_context.get('correlation_id', '')} {RESET}{message}")
         else:
-            print(f"WARNING {correlation_id} {message}")
+            print(f"WARNING {global_context.get('correlation_id', '')} {message}")
 
-    def error(self, message: str, correlation_id: str = "") -> None:
+    def error(self, message: str) -> None:
         """
         Logs an error message.
             message (str): The error message to log.
             correlation_id (str): An optional correlation ID for tracking requests.
         """
         if self.is_debug:
-            print(f"{RED}ERROR {correlation_id} {RESET}{message}")
+            print(f"{RED}ERROR {global_context.get('correlation_id', '')} {RESET}{message}")
         else:
-            print(f"ERROR {correlation_id} {message}")
+            print(f"ERROR {global_context.get('correlation_id', '')} {message}")
 
-    def debug(self, message: str, correlation_id: str = "") -> None:
+    def debug(self, message: str) -> None:
         """
         Logs a debug message if debug mode is enabled.
             message (str): The debug message to log.
             correlation_id (str): An optional correlation ID for tracking requests.
         """
         if self.is_debug:
-            print(f"{MAGENTA}DEBUG {correlation_id} {RESET}{message}")
+            print(f"{MAGENTA}DEBUG {global_context.get('correlation_id', '')} {RESET}{message}")
 
     def spacer(self) -> None:
         """
