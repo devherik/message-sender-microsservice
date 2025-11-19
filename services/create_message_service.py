@@ -3,7 +3,7 @@ from models.interfaces import IDatabaseRepository
 from repositories.message_sender_repository import MessageSenderRepository
 
 
-class MessageService:
+class CreateMessageService:
     """
     This is our Application/Use Case layer. It orchestrates the domain entities
     and uses repository interfaces to perform tasks. It contains the core

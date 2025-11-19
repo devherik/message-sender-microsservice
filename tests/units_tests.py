@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock, AsyncMock
 from models.models import MessageRequest
-from services.message_service import MessageService
+from services.create_message_service import CreateMessageService
 from models.interfaces import IDatabaseRepository
 
 
@@ -34,7 +34,7 @@ class TestMessageServiceBusinessLogic:
     @pytest.fixture
     def message_service(self, mock_repository):
         """Inject the mock repository into our service."""
-        return MessageService(db_repository=mock_repository)
+        return CreateMessageService(db_repository=mock_repository)
 
     # ============================================================
     # Test 1: Happy Path - Message Creation Success

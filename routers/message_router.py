@@ -4,7 +4,7 @@ from core.dependencies import get_db_service
 from models.interfaces import IDatabaseRepository
 from models.models import Message
 from routers.schemas import ResponseModel
-from services.message_service import MessageService
+from services.create_message_service import CreateMessageService
 
 router = APIRouter()
 
@@ -12,18 +12,18 @@ router = APIRouter()
 # This dependency provides the service, which contains our business logic.
 def get_message_service(
     db: IDatabaseRepository = Depends(get_db_service),
-) -> MessageService:
+) -> CreateMessageService:
     """
     Dependency to create a MessageService with a request-scoped database connection.
     """
-    return MessageService(db)
+    return CreateMessageService(db)
 
 
 @router.post("/messages/{app_id}", response_model=ResponseModel, status_code=201)
 def create_message(
     app_id: int,
     message_content: str,
-    service: MessageService = Depends(get_message_service),
+    service: CreateMessageService = Depends(get_message_service),
 ):
     """
     Creates a new message and stores it.
