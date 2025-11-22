@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "agno>=2.2.6",
+    "agno>=2.3.2",
     "bcrypt>=5.0.0",
     "celery>=5.5.3",
     "fastapi[all,standard]>=0.120.4",
