@@ -51,8 +51,8 @@ def create_message(
         message_content=message_content,
         status="pending",
     )
-    id = service.create_message(message)
-    success = id is not None
+    id: int = service.create_message(message)
+    success: bool = id is not None
     return ResponseModel(
         success=success,
         message="Message created successfully"
