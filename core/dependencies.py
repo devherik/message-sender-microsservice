@@ -1,8 +1,10 @@
 from typing import Generator
 from psycopg2.extensions import connection as PgConnection
 
-from models.interfaces import IDatabaseRepository
+from models.interfaces import IMessageSenderRepository
+from repositories.database_interfaces import IDatabaseRepository
 from repositories.postgres_repository import PostgresRepository
+from repositories.message_sender_repository import MessageSenderRepository
 
 # The repository is instantiated once and shared across the application.
 # This is safe because it holds no per-request state.
@@ -28,3 +30,9 @@ def get_db_repository() -> IDatabaseRepository:
     This allows us to easily swap the database implementation in the future.
     """
     return db_repository
+
+
+def get_message_sender_repository(
+    db: IDatabaseRepository,
+) -> IMessageSenderRepository:
+    return MessageSenderRepository(db)

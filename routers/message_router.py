@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from core.dependencies import get_db_repository
-from models.interfaces import IDatabaseRepository
+from repositories.database_interfaces import IDatabaseRepository
 from models.models import Message
 from routers.schemas import ResponseModel
 from services.create_message_service import CreateMessageService

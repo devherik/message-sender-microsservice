@@ -6,7 +6,7 @@ from psycopg2.extensions import connection as PgConnection
 
 from core.dependencies import get_db_repository
 from core.settings import settings
-from models.interfaces import IDatabaseRepository
+from repositories.database_interfaces import IDatabaseRepository
 from models.models import SystemInfo
 from routers import message_router
 from routers.schemas import ResponseModel

@@ -5,11 +5,12 @@ Handles database operations for sending messages
 
 from psycopg2.extensions import connection as PgConnection
 
-from models.interfaces import IDatabaseRepository
+from models.interfaces import IMessageSenderRepository
+from repositories.database_interfaces import IDatabaseRepository
 from models.models import Message, MessageLogs, MessageMetrics
 
 
-class MessageSenderRepository:
+class MessageSenderRepository(IMessageSenderRepository):
     def __init__(self, db: IDatabaseRepository):
         self.db_repo = db
 

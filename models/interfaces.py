@@ -1,31 +1,26 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
-from psycopg2.extensions import connection as PgConnection
+
+from models.models import Message, MessageLogs, MessageMetrics
 
 
-class IDatabaseRepository(ABC):
+class IMessageSenderRepository(ABC):
     @abstractmethod
-    def get_connection(self) -> PgConnection:
-        pass
-
-    @abstractmethod
-    def close_connection(self, connection: PgConnection) -> None:
-        pass
-
-    @abstractmethod
-    def is_connection_alive(self, connection: PgConnection) -> bool:
-        pass
-
-    @abstractmethod
-    def execute_with_retry(
+    def persist_message(
         self,
-        query: str,
-        params: Optional[Dict[str, Any]],
-        max_retries: int,
-        connection: PgConnection,
-    ) -> Any:
+        message: Message,
+    ) -> int | None:
         pass
 
     @abstractmethod
-    def get_connection_info(self, connection: PgConnection) -> Dict[str, Any]:
+    def log_message_activity(
+        self,
+        log: MessageLogs,
+    ) -> bool:
+        pass
+
+    @abstractmethod
+    def record_message_metrics(
+        self,
+        metrics: MessageMetrics,
+    ) -> bool:
         pass

@@ -1,6 +1,5 @@
 from models.models import Message, MessageLogs, LogTypeEnum
-from models.interfaces import IDatabaseRepository
-from repositories.message_sender_repository import MessageSenderRepository
+from models.interfaces import IMessageSenderRepository
 
 
 class CreateMessageService:
@@ -10,12 +9,12 @@ class CreateMessageService:
     business logic of the application.
     """
 
-    def __init__(self, db: IDatabaseRepository):
+    def __init__(self, message_sender_repository: IMessageSenderRepository):
         """
-        The service depends on a connection, not the repository itself.
-        This makes it more flexible and easier to test.
+        The service depends on an abstraction (IMessageSenderRepository),
+        not a concrete implementation.
         """
-        self.repository = MessageSenderRepository(db)
+        self.repository = message_sender_repository
 
     def create_message(self, message: Message) -> int:
         """

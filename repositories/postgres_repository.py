@@ -3,7 +3,7 @@ from psycopg2.extensions import connection as PgConnection
 from typing import Any, Dict, Optional
 
 from core.settings import settings
-from models.interfaces import IDatabaseRepository
+from repositories.database_interfaces import IDatabaseRepository
 
 
 class PostgresRepository(IDatabaseRepository):
