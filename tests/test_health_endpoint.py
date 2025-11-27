@@ -14,13 +14,18 @@ def test_health_endpoint():
     # Mock the database status check to avoid connection errors/hangs
     with patch("main.postgres_db_status", return_value=True):
         with TestClient(app) as client:
-            # Wait a bit to ensure uptime is non-zero
             time.sleep(1)
 
-            response = client.get("/health")
+            response = client.get("/")
             assert response.status_code == 200
             data = response.json()
-            assert data["status"] == "ok"
-            assert "uptime" in data
-            # Check for timedelta format (e.g., "0:00:01" or "1 day, ...")
-            assert ":" in data["uptime"] or "day" in data["uptime"]
+            assert data.get("data").get("status") == "ok"
+            assert "uptime" in data.get("data")
+            assert ":" in data.get("data").get("uptime") or "day" in data.get(
+                "data"
+            ).get("uptime")
+            print("Test passed")
+
+
+if __name__ == "__main__":
+    test_health_endpoint()
