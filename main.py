@@ -13,6 +13,7 @@ from routers.schemas import ResponseModel
 from middlewares.correlation_id_mw import correlation_id_middleware
 from tests.database_tests import postgres_db_status
 from helpers.logging_helper import logger
+from helpers.uptime_helper import uptime_helper
 
 
 async def startup_event(app: FastAPI):
@@ -23,7 +24,7 @@ async def startup_event(app: FastAPI):
         sys_status: SystemInfo = SystemInfo(
             os="Linux",
             python_version="3.12",
-            service_uptime="72 hours",
+            service_uptime=uptime_helper.get_uptime(),
             all_dependencies_working=True,
             system_tests={"test_db_connection": postgres_db_status()},
         )
@@ -73,9 +74,18 @@ def read_root(request: Request, db: IDatabaseRepository = Depends(get_db_reposit
         data={
             "service": "message-sender-microsservice",
             "status": "ok",
-            "database_info": db.get_connection_info(conn),
+            "uptime": uptime_helper.get_uptime(),
+            "is_db_connected": db.is_connection_alive(conn),
         },
     )
+
+
+@app.get("/health", tags=["Health"])
+def health_check():
+    """
+    Health check endpoint to monitor service uptime.
+    """
+    return {"status": "ok", "uptime": uptime_helper.get_uptime()}
 
 
 app.include_router(message_router.router, prefix="/api", tags=["Messages"])
