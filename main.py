@@ -8,7 +8,7 @@ from core.dependencies import get_db_repository
 from core.settings import settings
 from repositories.database_interfaces import IDatabaseRepository
 from models.models import SystemInfo
-from routers import message_router
+from routers import message_router, test_router
 from routers.schemas import ResponseModel
 from middlewares.correlation_id_mw import correlation_id_middleware
 from tests.database_tests import postgres_db_status
@@ -89,6 +89,7 @@ def health_check():
 
 
 app.include_router(message_router.router, prefix="/api", tags=["Messages"])
+app.include_router(test_router.router, prefix="/api", tags=["Tests"])
 
 app.middleware("http")(correlation_id_middleware)
 
