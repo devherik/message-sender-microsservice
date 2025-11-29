@@ -1,216 +1,71 @@
-# Message Sender Microservice
+# Versatile Data Ingestion Platform
 
-A production-ready messaging microservice built with **Clean Architecture** principles, demonstrating advanced software engineering practices and modern Python development.
+A production-ready **data ingestion and analytics platform** built with **Clean Architecture** principles. This microservice can receive data from N applications, apply routing rules, persist to database, and provide comprehensive statistics.
+
+## 🚀 What's New in v0.2.0
+
+### Universal Data Ingestion
+- **Accept ANY data type** from ANY application via flexible JSON payloads
+- **No code changes needed** for new event types
+- **Automatic metadata enrichment** (IP, user-agent, correlation ID)
+
+### Intelligent Routing
+- **Configurable routing rules** stored in database
+- **Condition-based matching** with operators (`$gt`, `$lt`, `$eq`, etc.)
+- **Priority-based execution** for complex routing scenarios
+- **Multiple destination types**: webhooks, database tables, message queues
+
+### Comprehensive Analytics
+- **Pre-aggregated statistics** for fast dashboard queries
+- **Flexible time periods**: hourly, daily, weekly
+- **Event-type filtering** for detailed analysis
+- **Real-time metrics** with manual refresh capability
+
+---
 
 ## Architecture Overview
 
-This project implements **Clean Architecture** with strict adherence to **SOLID principles**, ensuring maintainability, testability, and scalability. The architecture separates concerns into distinct layers with well-defined boundaries and dependencies flowing inward.
+This project implements **Clean Architecture** with strict adherence to **SOLID principles**, ensuring maintainability, testability, and scalability.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    Presentation Layer                    │
-│              (FastAPI Routers & Endpoints)               │
+│         (FastAPI Routers - REST API Endpoints)           │
+│   /api/ingest  |  /api/routing-rules  |  /api/statistics │
 └────────────────────┬────────────────────────────────────┘
                      │ depends on ↓
 ┌─────────────────────────────────────────────────────────┐
 │                   Application Layer                      │
-│        (Use Cases / Business Logic / Services)           │
+│              (Use Cases / Services)                      │
+│  DataIngestionService | RoutingService | StatisticsService │
 └────────────────────┬────────────────────────────────────┘
                      │ depends on ↓
 ┌─────────────────────────────────────────────────────────┐
 │                     Domain Layer                         │
-│              (Entities, Interfaces, Models)              │
+│         (Entities, Interfaces, Business Rules)           │
+│   DataEvent | RoutingRule | EventStatistics              │
 └─────────────────────────────────────────────────────────┘
                      ↑ implemented by
 ┌─────────────────────────────────────────────────────────┐
 │                 Infrastructure Layer                     │
-│         (Database, External APIs, Frameworks)            │
+│         (PostgreSQL Repositories, External APIs)         │
 └─────────────────────────────────────────────────────────┘
 ```
 
-## Key Technical Highlights
-
-### Clean Architecture Implementation
-
-- **Dependency Inversion Principle (DIP)**: High-level modules (services) depend on abstractions (`IDatabaseRepository` interface) rather than concrete implementations
-- **Single Responsibility Principle (SRP)**: Each component has one clear purpose - repositories handle data persistence, services contain business logic, routers manage HTTP concerns
-- **Open/Closed Principle (OCP)**: The system is open for extension through interfaces while closed for modification
-- **Interface Segregation**: Clean, focused interfaces that define clear contracts between layers
-
-### Advanced Python Features
-
-- **Strong Type Hinting**: Comprehensive type annotations throughout the codebase
-- **Pydantic Models**: Data validation and serialization with Pydantic v2
-- **Abstract Base Classes (ABC)**: Formal interface definitions enforcing contracts
-- **Async Context Managers**: Proper resource management with lifespan events
-- **Dependency Injection**: FastAPI's DI system used for clean component composition
-
-### Production-Ready Patterns
-
-- **Connection Pooling Strategy**: Proper database connection lifecycle management
-- **Retry Logic**: Automatic retry mechanism for transient database failures
-- **Correlation IDs**: Request tracing middleware for distributed system observability
-- **Structured Logging**: Contextual logging with correlation ID propagation
-- **Configuration Management**: Environment-based settings with Pydantic Settings
-- **Health Checks**: Comprehensive health endpoint with database status verification
-
-## Technology Stack
-
-**Core Framework:**
-- FastAPI 0.120.4 - Modern async web framework
-- Python 3.12+ - Latest Python features and performance improvements
-- Uvicorn - High-performance ASGI server
-
-**Data & Persistence:**
-- PostgreSQL - Primary relational database
-- psycopg2 - Database adapter with connection management
-- pgvector - Vector similarity search support
-
-**AI/ML Integration:**
-- Agno Framework - AI agent orchestration
-- Google GenAI - LLM integration capabilities
-
-**Task Processing:**
-- Celery - Distributed task queue for async operations
-- Redis - Message broker and caching layer
-
-**Security & Authentication:**
-- python-jose - JWT token handling
-- bcrypt - Password hashing
-
-**Code Quality:**
-- Pydantic - Data validation and settings management
-- Python type hints - Static type checking support
-
-## Project Structure
-
-```
-message-sender-microsservice/
-├── core/                          # Application core configuration
-│   ├── dependencies.py           # Dependency injection setup
-│   ├── security.py               # Authentication & authorization
-│   └── settings.py               # Environment configuration
-├── models/                        # Domain layer
-│   ├── interfaces.py             # Abstract interfaces (DIP)
-│   └── models.py                 # Domain entities & DTOs
-├── services/                      # Application layer (use cases)
-│   └── message_service.py        # Business logic orchestration
-├── repositories/                  # Infrastructure layer
-│   ├── message_sender_repository.py
-│   └── postgres_repository.py    # Concrete DB implementation
-├── routers/                       # Presentation layer
-│   └── message_router.py         # HTTP endpoints
-├── middlewares/                   # Cross-cutting concerns
-│   └── correlation_id_mw.py      # Request tracing
-├── database/
-│   └── schema.sql                # Database schema definition
-├── helpers/                       # Utilities
-│   ├── logging_helper.py
-│   └── dotenv_load_helper.py
-└── tests/                         # Test suite
-    ├── database_tests.py
-    └── waha_api_test.py
-```
+---
 
 ## Core Features
 
-### Message Management
-- **Asynchronous Message Processing**: Non-blocking message creation and delivery
-- **Multi-Application Support**: Isolated message queues per application
-- **Message Logging**: Comprehensive audit trail of message lifecycle
-- **Metrics Collection**: Performance tracking and delivery analytics
-- **Webhook Integration**: Event-driven notifications for message status
-
-### Observability
-- **Correlation ID Tracking**: End-to-end request tracing across services
-- **Structured Logging**: Context-rich logs for debugging and monitoring
-- **Health Endpoints**: System status and dependency health checks
-- **Metrics Storage**: Historical data for performance analysis
-
-### Data Model
-
-The system manages multiple entities with proper relational integrity:
-
-- **Applications**: Multi-tenant support with API key authentication
-- **Phone Numbers**: Sender identity management with webhook configuration
-- **Messages**: Core messaging entity with status tracking
-- **Message Logs**: Audit trail for compliance and debugging
-- **Message Metrics**: Performance and delivery statistics
-- **Webhooks**: Event notification configuration
-
-## Design Patterns Demonstrated
-
-1. **Repository Pattern**: Abstracts data access logic from business logic
-2. **Dependency Injection**: Loose coupling through constructor injection
-3. **Strategy Pattern**: Swappable database implementations via interfaces
-4. **Factory Pattern**: Service creation through dependency functions
-5. **Middleware Pattern**: Cross-cutting concerns handled elegantly
-6. **Circuit Breaker**: Retry logic prevents cascading failures
-
-## Getting Started
-
-### Prerequisites
-- Python 3.12+
-- PostgreSQL 14+
-- Redis 7+ (for Celery)
-
-### Installation
-
-1. Clone the repository:
+### 1. Universal Data Ingestion
 ```bash
-git clone https://github.com/devherik/message-sender-microsservice.git
-cd message-sender-microsservice
-```
-
-2. Create a virtual environment and install dependencies:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-3. Configure environment variables:
-```bash
-cp .env.example .env
-# Edit .env with your configuration
-```
-
-4. Set up the database:
-```bash
-psql -U postgres -f database/schema.sql
-```
-
-5. Run the application:
-```bash
-uvicorn main:app --reload
-```
-
-The API will be available at `http://localhost:8000`
-
-### API Documentation
-
-Once running, access the interactive API documentation:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
-
-## API Endpoints
-
-### Health Check
-```http
-GET /
-```
-Returns service status and database connectivity information.
-
-### Create Message
-```http
-POST /api/messages/{app_id}
-```
-Creates a new message for the specified application.
-
-**Request Body:**
-```json
+POST /api/ingest/{app_id}
 {
-  "message_content": "Your message here"
+  "event_type": "order_created",
+  "payload": {
+    "order_id": "ORD-123",
+    "customer_id": 456,
+    "total": 99.99
+  }
 }
 ```
 
@@ -218,59 +73,311 @@ Creates a new message for the specified application.
 ```json
 {
   "success": true,
-  "message": "Message created successfully",
+  "message": "Data ingested successfully",
   "data": {
-    "message_id": 123
+    "event_id": 789,
+    "routing_summary": {
+      "rules_evaluated": 2,
+      "rules_matched": 1,
+      "rules_executed": 1
+    }
   }
 }
 ```
 
-## Development Practices
+### 2. Routing Rules Management
 
-### Code Quality
-- **Type Safety**: Comprehensive type hints throughout the codebase
-- **Data Validation**: Pydantic models ensure data integrity at boundaries
-- **Error Handling**: Explicit exception handling with proper propagation
-- **Separation of Concerns**: Clear boundaries between layers
+Create rules to automatically route data:
 
-### Testing Strategy
-- **Unit Tests**: Business logic tested in isolation
-- **Integration Tests**: Database and external API testing
-- **Mock Dependencies**: Interface-based mocking for clean tests
+```bash
+POST /api/routing-rules
+{
+  "app_id": 1,
+  "rule_name": "Forward high-value orders",
+  "event_type_filter": "order_created",
+  "condition": {"payload.total": {"$gt": 50}},
+  "destination_type": "webhook",
+  "destination_config": {"url": "https://example.com/webhook"},
+  "priority": 10
+}
+```
 
-### Configuration Management
-- **Environment-Based**: Separate configs for dev/staging/production
-- **Type-Safe Settings**: Pydantic Settings for validation
-- **Secrets Management**: Secure handling of sensitive configuration
+**Supported Operators:**
+- `$gt` - Greater than
+- `$lt` - Less than
+- `$gte` - Greater than or equal
+- `$lte` - Less than or equal
+- `$eq` - Equal
+- `$ne` - Not equal
+- `$exists` - Field exists
+
+### 3. Analytics & Statistics
+
+Get aggregated metrics:
+
+```bash
+GET /api/statistics/1?time_period=daily&event_type=order_created
+```
+
+**Dashboard Metrics:**
+```bash
+GET /api/statistics/dashboard/1?time_period=daily
+```
+
+Returns summary across all event types with totals.
+
+---
+
+## Technology Stack
+
+**Core Framework:**
+- FastAPI 0.120.4 - Modern async web framework
+- Python 3.12+ - Latest features and performance
+- Uvicorn - High-performance ASGI server
+
+**Data & Persistence:**
+- PostgreSQL - Primary database with JSONB support
+- psycopg2 - Database adapter with connection pooling
+- GIN indexes - Optimized JSONB querying
+
+**Architecture:**
+- Pydantic v2 - Data validation and serialization
+- ABC (Abstract Base Classes) - Interface definitions
+- Dependency Injection - Clean component composition
+
+---
+
+## Project Structure
+
+```
+message-sender-microsservice/
+├── models/                        # Domain Layer
+│   ├── models.py                 # Legacy message entities
+│   ├── data_events.py            # NEW: Generic data entities
+│   └── interfaces.py             # Repository interfaces (DIP)
+├── services/                      # Application Layer
+│   ├── data_ingestion_service.py # NEW: Data ingestion use case
+│   ├── routing_service.py        # NEW: Routing logic
+│   ├── statistics_service.py     # NEW: Analytics use case
+│   └── routing_rule_service.py   # NEW: Rule management
+├── repositories/                  # Infrastructure Layer
+│   ├── data_event_repository.py  # NEW: Event persistence
+│   ├── routing_rule_repository.py # NEW: Rule persistence
+│   ├── statistics_repository.py  # NEW: Analytics queries
+│   └── postgres_repository.py    # Database connection
+├── routers/                       # Presentation Layer
+│   ├── data_ingestion_router.py  # NEW: Ingestion endpoints
+│   ├── routing_rules_router.py   # NEW: Rule management endpoints
+│   ├── statistics_router.py      # NEW: Analytics endpoints
+│   ├── message_router.py         # Legacy message endpoints
+│   └── test_router.py
+├── database/
+│   └── schema.sql                # Database schema with new tables
+└── main.py                        # Application entry point
+```
+
+---
+
+## API Endpoints
+
+### Data Ingestion
+- `POST /api/ingest/{app_id}` - Ingest any data event
+- `GET /api/events/{event_id}` - Retrieve specific event
+- `GET /api/events/app/{app_id}` - List events for application
+
+### Routing Rules
+- `POST /api/routing-rules` - Create routing rule
+- `GET /api/routing-rules/{rule_id}` - Get rule by ID
+- `GET /api/routing-rules/app/{app_id}` - List rules for application
+- `PUT /api/routing-rules/{rule_id}` - Update rule
+- `DELETE /api/routing-rules/{rule_id}` - Delete rule
+- `PATCH /api/routing-rules/{rule_id}/toggle` - Enable/disable rule
+
+### Statistics
+- `GET /api/statistics/{app_id}` - Get aggregated statistics
+- `GET /api/statistics/dashboard/{app_id}` - Dashboard metrics
+- `POST /api/statistics/refresh/{app_id}` - Manually refresh stats
+
+### Legacy (Backward Compatible)
+- `POST /api/messages/{app_id}` - Create message
+- `GET /` - Health check with database status
+- `GET /health` - Simple health check
+
+---
+
+## Database Schema
+
+### New Tables
+
+**data_events** - Universal event storage
+```sql
+CREATE TABLE data_events (
+    event_id SERIAL PRIMARY KEY,
+    app_id INTEGER NOT NULL REFERENCES applications(app_id),
+    event_type VARCHAR(100) NOT NULL,
+    payload JSONB NOT NULL,
+    metadata JSONB DEFAULT '{}',
+    processed BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**routing_rules** - Routing configurations
+```sql
+CREATE TABLE routing_rules (
+    rule_id SERIAL PRIMARY KEY,
+    app_id INTEGER NOT NULL REFERENCES applications(app_id),
+    rule_name VARCHAR(255) NOT NULL,
+    event_type_filter VARCHAR(100),
+    condition JSONB NOT NULL,
+    destination_type VARCHAR(50) NOT NULL,
+    destination_config JSONB NOT NULL,
+    priority INTEGER DEFAULT 0,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**event_statistics** - Pre-aggregated metrics
+```sql
+CREATE TABLE event_statistics (
+    stat_id SERIAL PRIMARY KEY,
+    app_id INTEGER NOT NULL REFERENCES applications(app_id),
+    event_type VARCHAR(100) NOT NULL,
+    total_events INTEGER DEFAULT 0,
+    processed_events INTEGER DEFAULT 0,
+    failed_events INTEGER DEFAULT 0,
+    pending_events INTEGER DEFAULT 0,
+    time_bucket TIMESTAMP WITH TIME ZONE NOT NULL,
+    time_period VARCHAR(20) NOT NULL,
+    UNIQUE(app_id, event_type, time_bucket, time_period)
+);
+```
+
+**Performance Indexes:**
+- GIN indexes on JSONB columns for fast querying
+- B-tree indexes on app_id, event_type, created_at
+- Composite indexes for common query patterns
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Python 3.12+
+- PostgreSQL 14+
+
+### Installation
+
+1. Clone and setup:
+```bash
+git clone https://github.com/devherik/message-sender-microsservice.git
+cd message-sender-microsservice
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+2. Configure environment:
+```bash
+cp .env.example .env
+# Edit .env with your database credentials
+```
+
+3. Initialize database:
+```bash
+psql -U postgres -f database/schema.sql
+```
+
+4. Run the application:
+```bash
+uvicorn main:app --reload
+```
+
+5. Access API documentation:
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`
+
+---
+
+## Design Patterns & Principles
+
+### SOLID Principles
+
+**Single Responsibility (SRP)**
+- Each service has one clear purpose
+- `DataIngestionService` handles ingestion only
+- `RoutingService` handles routing only
+- `StatisticsService` handles analytics only
+
+**Open/Closed (OCP)**
+- System is open for extension via new event types
+- Closed for modification - no code changes needed
+- New routing strategies added via configuration
+
+**Dependency Inversion (DIP)**
+- Services depend on interfaces, not implementations
+- Easy testing with mocks
+- Can swap PostgreSQL for another database
+
+**Interface Segregation (ISP)**
+- Focused interfaces for each repository
+- Clients only depend on methods they use
+
+### Design Patterns
+
+1. **Repository Pattern** - Data access abstraction
+2. **Strategy Pattern** - Pluggable routing strategies
+3. **Dependency Injection** - Loose coupling
+4. **CQRS** - Separate read/write models for statistics
+
+---
 
 ## Why This Architecture?
 
-This project demonstrates key principles that scale from startups to enterprise:
+1. **Flexibility** - Accept any data type without code changes
+2. **Testability** - Interface-based design enables easy mocking
+3. **Maintainability** - Clear separation of concerns
+4. **Scalability** - Stateless design, horizontal scaling ready
+5. **Observability** - Built-in metadata tracking and correlation IDs
 
-1. **Testability**: Interface-based design allows easy mocking and unit testing
-2. **Maintainability**: Clear separation of concerns makes changes predictable
-3. **Flexibility**: New features can be added without modifying existing code
-4. **Scalability**: Stateless design enables horizontal scaling
-5. **Team Collaboration**: Well-defined boundaries reduce merge conflicts
+---
 
-## Future Enhancements
+## Example Use Cases
 
-- [ ] Implement message scheduling functionality
-- [ ] Add rate limiting per application
-- [ ] Implement retry policies for failed deliveries
-- [ ] Add support for message templates
-- [ ] Implement WebSocket support for real-time updates
-- [ ] Add comprehensive monitoring with Prometheus/Grafana
-- [ ] Implement Circuit Breaker pattern for external API calls
-- [ ] Add support for message prioritization
+### E-commerce Platform
+```python
+# Ingest order events
+POST /api/ingest/1
+{"event_type": "order_created", "payload": {"order_id": "123", "total": 99.99}}
+
+# Route high-value orders to fulfillment webhook
+POST /api/routing-rules
+{"condition": {"payload.total": {"$gt": 50}}, "destination_type": "webhook"}
+
+# Track order statistics
+GET /api/statistics/1?event_type=order_created&time_period=daily
+```
+
+### User Analytics
+```python
+# Track user actions
+POST /api/ingest/2
+{"event_type": "user_login", "payload": {"user_id": 456, "device": "mobile"}}
+
+# Get user activity metrics
+GET /api/statistics/dashboard/2?time_period=hourly
+```
+
+---
 
 ## Contributing
 
-This is a portfolio project, but suggestions and feedback are welcome. Feel free to open an issue to discuss potential improvements.
+This is a portfolio project demonstrating software engineering best practices. Suggestions and feedback are welcome!
 
 ## License
 
-This project is available for review and educational purposes.
+Available for review and educational purposes.
 
 ## Contact
 
@@ -280,4 +387,4 @@ This project is available for review and educational purposes.
 
 ---
 
-**Note**: This project was built to demonstrate software engineering best practices, Clean Architecture principles, and production-ready Python development. It showcases the ability to design scalable, maintainable systems suitable for real-world applications.
+**Built with Clean Architecture, SOLID principles, and a passion for well-designed systems.**
