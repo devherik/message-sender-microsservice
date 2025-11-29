@@ -7,7 +7,6 @@ Manages the persistence and retrieval of routing rules.
 
 import json
 from typing import List, Optional
-from datetime import datetime
 from psycopg2.extensions import connection as PgConnection
 
 from models.data_events import RoutingRule

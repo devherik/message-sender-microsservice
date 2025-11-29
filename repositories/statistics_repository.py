@@ -10,7 +10,6 @@ Why separate repository?
 - Allows for specialized optimizations (caching, materialized views)
 """
 
-import json
 from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 from psycopg2.extensions import connection as PgConnection

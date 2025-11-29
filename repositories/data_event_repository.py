@@ -14,7 +14,6 @@ Why this separation matters (Clean Architecture):
 
 import json
 from typing import List, Optional
-from datetime import datetime
 from psycopg2.extensions import connection as PgConnection
 
 from models.data_events import DataEvent
