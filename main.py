@@ -9,6 +9,7 @@ from core.settings import settings
 from repositories.database_interfaces import IDatabaseRepository
 from models.models import SystemInfo
 from routers import message_router, test_router
+from routers import data_ingestion_router, routing_rules_router, statistics_router
 from routers.schemas import ResponseModel
 from middlewares.correlation_id_mw import correlation_id_middleware
 from tests.database_tests import postgres_db_status
@@ -54,9 +55,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 
 app = FastAPI(
-    title="Message Sender Microsservice",
-    description="A microservice for sending messages, built with Clean Architecture.",
-    version="0.1.0",
+    title="Versatile Data Ingestion Platform",
+    description="A microservice for ingesting data from N applications, routing, persisting, and providing analytics. Built with Clean Architecture.",
+    version="0.2.0",
     lifespan=lifespan,
 )
 
@@ -88,8 +89,14 @@ def health_check():
     return {"status": "ok", "uptime": uptime_helper.get_uptime()}
 
 
+# Legacy message-sending endpoints (backward compatible)
 app.include_router(message_router.router, prefix="/api", tags=["Messages"])
 app.include_router(test_router.router, prefix="/api", tags=["Tests"])
+
+# Data Ingestion Platform endpoints
+app.include_router(data_ingestion_router.router, prefix="/api", tags=["Data Ingestion"])
+app.include_router(routing_rules_router.router, prefix="/api", tags=["Routing Rules"])
+app.include_router(statistics_router.router, prefix="/api", tags=["Statistics"])
 
 app.middleware("http")(correlation_id_middleware)
 
