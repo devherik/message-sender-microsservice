@@ -9,6 +9,9 @@ from typing import Dict, Any, Optional
 from fastapi import APIRouter, Depends, Request, HTTPException, status, BackgroundTasks
 from pydantic import BaseModel, Field
 
+
+from core.dependencies import get_routing_service
+from core.dependencies import get_data_ingestion_service
 from services.data_ingestion_service import DataIngestionService
 from services.routing_service import RoutingService
 from routers.schemas import ResponseModel
@@ -34,36 +37,6 @@ class IngestEventRequest(BaseModel):
     payload: Dict[str, Any] = Field(
         ..., description="The actual event data as a flexible JSON object"
     )
-
-
-async def get_data_ingestion_service() -> DataIngestionService:
-    """
-    Dependency injection for DataIngestionService.
-
-    TODO: Move to core/dependencies.py for consistency
-    """
-    from core.dependencies import get_db_repository
-    from repositories.data_event_repository import PostgresDataEventRepository
-
-    db = get_db_repository()
-    data_event_repo = PostgresDataEventRepository(db)
-    return DataIngestionService(data_event_repo)
-
-
-async def get_routing_service() -> RoutingService:
-    """
-    Dependency injection for RoutingService.
-
-    TODO: Move to core/dependencies.py for consistency
-    """
-    from core.dependencies import get_db_repository
-    from repositories.data_event_repository import PostgresDataEventRepository
-    from repositories.routing_rule_repository import PostgresRoutingRuleRepository
-
-    db = get_db_repository()
-    data_event_repo = PostgresDataEventRepository(db)
-    routing_rule_repo = PostgresRoutingRuleRepository(db)
-    return RoutingService(routing_rule_repo, data_event_repo)
 
 
 async def async_apply_routing(

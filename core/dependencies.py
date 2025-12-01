@@ -1,6 +1,10 @@
+from services.data_ingestion_service import DataIngestionService
+from services.routing_service import RoutingService
 from typing import Generator
 from psycopg2.extensions import connection as PgConnection
 
+from repositories.data_event_repository import PostgresDataEventRepository
+from repositories.routing_rule_repository import PostgresRoutingRuleRepository
 from models.interfaces import IMessageSenderRepository
 from repositories.database_interfaces import IDatabaseRepository
 from repositories.postgres_repository import PostgresRepository
@@ -36,3 +40,28 @@ def get_message_sender_repository(
     db: IDatabaseRepository,
 ) -> IMessageSenderRepository:
     return MessageSenderRepository(db)
+
+
+async def get_data_ingestion_service() -> DataIngestionService:
+    """
+    Dependency injection for DataIngestionService.
+
+    TODO: Move to core/dependencies.py for consistency
+    """
+
+    db = get_db_repository()
+    data_event_repo = PostgresDataEventRepository(db)
+    return DataIngestionService(data_event_repo)
+
+
+async def get_routing_service() -> RoutingService:
+    """
+    Dependency injection for RoutingService.
+
+    TODO: Move to core/dependencies.py for consistency
+    """
+
+    db = get_db_repository()
+    data_event_repo = PostgresDataEventRepository(db)
+    routing_rule_repo = PostgresRoutingRuleRepository(db)
+    return RoutingService(routing_rule_repo, data_event_repo)
